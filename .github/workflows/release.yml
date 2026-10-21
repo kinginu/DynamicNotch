@@ -1,0 +1,123 @@
+# DynamicNotch release: runs when a v* tag is pushed (scripts/tag-release.sh creates it).
+# Dev-repository copy: DynamicNotchApp/.github-public/workflows/ is exported to
+# .github/workflows/ of github.com/kinginu/DynamicNotch.
+#
+# Builds the Release configuration with the version from the tag, signs the app ad hoc with
+# Hardened Runtime (there is no Developer ID, so the app is not notarized), and publishes a
+# GitHub Release with:
+#   DynamicNotch-<version>.zip   the app (ditto, keeps the bundle's signature and modes)
+#   manual-install.tar.gz        the helper installer scripts, as bundled in the app
+#   SHA256SUMS.txt               shasum -a 256 of both
+# The notes are the tag's section of DynamicNotchApp/CHANGELOG.md (scripts/release-notes.sh);
+# the release fails when that section is missing.
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+env:
+  # macos-26 image: Xcode 26.6 (default) with the macOS 26.5 SDK.
+  DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
+  HOMEBREW_NO_AUTO_UPDATE: "1"
+  HOMEBREW_NO_INSTALL_CLEANUP: "1"
+
+defaults:
+  run:
+    shell: bash   # -eo pipefail
+
+jobs:
+  release:
+    name: release
+    runs-on: macos-26
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: recursive
+
+      - name: Version from the tag
+        run: |
+          tag="$GITHUB_REF_NAME"
+          version="${tag#v}"
+          if [[ ! "$version" =~ ^([0-9]+)\.([0-9]+)\.([0-9]+)$ ]]; then
+            echo "::error::tag $tag is not vX.Y.Z"; exit 1
+          fi
+          build=$(( 10#${BASH_REMATCH[1]} * 10000 + 10#${BASH_REMATCH[2]} * 100 + 10#${BASH_REMATCH[3]} ))
+          spec="$(sed -n 's/^    MARKETING_VERSION: "\(.*\)"$/\1/p' DynamicNotchApp/project.yml)"
+          if [[ "$spec" != "$version" ]]; then
+            echo "::error::project.yml has MARKETING_VERSION $spec but the tag is $tag (use scripts/tag-release.sh)"; exit 1
+          fi
+          { echo "TAG=$tag"; echo "VERSION=$version"; echo "BUILD=$build"; } >> "$GITHUB_ENV"
+          echo "Releasing $version (build $build)"
+
+      - name: Release notes (CHANGELOG.md)
+        run: |
+          scripts/release-notes.sh "$VERSION" > "$RUNNER_TEMP/notes.md"
+          cat >> "$RUNNER_TEMP/notes.md" <<NOTES
+
+          ---
+
+          **Install:** unzip \`DynamicNotch-$VERSION.zip\`, move \`DynamicNotch.app\` to /Applications and run
+          \`xattr -dr com.apple.quarantine /Applications/DynamicNotch.app\` (the app is ad-hoc signed, not
+          notarized). For fan control, click **Install Helper…** in Settings ▸ Fan Control ▸ General, and
+          again after every update. Checksums: \`SHA256SUMS.txt\`. See the
+          [README](https://github.com/${GITHUB_REPOSITORY}/blob/$TAG/README.md#install).
+          NOTES
+          cat "$RUNNER_TEMP/notes.md"
+
+      - name: Toolchain
+        run: |
+          xcodebuild -version
+          brew install xcodegen
+
+      - name: Build (Release)
+        run: |
+          cd DynamicNotchApp
+          xcodegen generate --quiet
+          xcodebuild -project DynamicNotch.xcodeproj -scheme DynamicNotch -configuration Release \
+            -derivedDataPath "$RUNNER_TEMP/derived" \
+            MARKETING_VERSION="$VERSION" CURRENT_PROJECT_VERSION="$BUILD" CODE_SIGN_IDENTITY=- \
+            build | tail -n 40
+          echo "APP=$RUNNER_TEMP/derived/Build/Products/Release/DynamicNotch.app" >> "$GITHUB_ENV"
+
+      - name: Sign (ad hoc, Hardened Runtime) and verify
+        run: |
+          # Re-sign every nested component and the app ad hoc with Hardened Runtime; keep each
+          # one's identifier (the helper's must stay com.example.dynamicnotch.DynamicNotch.fanfi,
+          # checked by install.sh) and its entitlements.
+          codesign --force --deep --options runtime --preserve-metadata=identifier,entitlements \
+            --sign - "$APP"
+          codesign --verify --deep --strict --verbose=2 "$APP"
+          for code in "$APP" "$APP/Contents/MacOS/FanControlHelper"; do
+            info="$(codesign -dvvv "$code" 2>&1)"
+            echo "$info" | grep -E '^(Identifier|CodeDirectory|CDHash)'
+            echo "$info" | grep -q 'flags=0x10002(adhoc,runtime)' || { echo "::error::$code lacks adhoc,runtime"; exit 1; }
+          done
+          test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$APP/Contents/Info.plist")" = "$VERSION"
+          test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$APP/Contents/Info.plist")" = "$BUILD"
+          # The bundled installer accepts this exact build (no root: --dry-run only).
+          "$APP/Contents/Resources/manual-install/install.sh" --dry-run --app "$APP"
+
+      - name: Package
+        run: |
+          mkdir -p dist
+          ditto -c -k --keepParent "$APP" "dist/DynamicNotch-$VERSION.zip"
+          tar -C "$APP/Contents/Resources" -czf dist/manual-install.tar.gz manual-install
+          (cd dist && shasum -a 256 "DynamicNotch-$VERSION.zip" manual-install.tar.gz > SHA256SUMS.txt)
+          cat dist/SHA256SUMS.txt
+          ls -l dist
+
+      - name: Publish the GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$TAG" dist/* --verify-tag \
+            --title "DynamicNotch $VERSION" --notes-file "$RUNNER_TEMP/notes.md"

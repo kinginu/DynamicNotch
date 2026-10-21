@@ -1,0 +1,98 @@
+# DynamicNotch CI. Dev-repository copy: DynamicNotchApp/.github-public/workflows/ is exported to
+# .github/workflows/ of github.com/kinginu/DynamicNotch.
+#
+#   checks     scripts/check.sh --fast: CLT harness build + tests, FanControl (submodule) build
+#              with zero warnings + tests, strings lint, shellcheck
+#   app-build  XcodeGen + the Xcode Debug build of the app and its helper + the app's unit tests,
+#              then the installer bundled in the app in its dry-run mode
+#
+# Nothing here installs the helper, uses sudo, touches the SMC or launches the app.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  # macos-26 image: Xcode 26.6 (default) with the macOS 26.5 SDK.
+  DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
+  HOMEBREW_NO_AUTO_UPDATE: "1"
+  HOMEBREW_NO_INSTALL_CLEANUP: "1"
+
+defaults:
+  run:
+    shell: bash   # -eo pipefail
+
+jobs:
+  checks:
+    name: checks
+    runs-on: macos-26
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: recursive
+      - name: Toolchain
+        run: |
+          xcodebuild -version
+          swift --version
+      - name: Install shellcheck
+        run: brew install shellcheck
+      - name: Cache SwiftPM dependencies
+        uses: actions/cache@v6
+        with:
+          path: |
+            .build-check/harness/checkouts
+            .build-check/harness/repositories
+            ~/Library/Caches/org.swift.swiftpm
+          key: spm-harness-${{ runner.os }}-${{ hashFiles('DynamicNotchApp/Package.swift', 'DynamicNotchApp/Package.resolved') }}
+          restore-keys: spm-harness-${{ runner.os }}-
+      - name: scripts/check.sh --fast
+        run: scripts/check.sh --fast --keep-going
+      - name: Upload logs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: check-logs
+          path: .build-check/logs
+          if-no-files-found: ignore
+
+  app-build:
+    name: app-build
+    runs-on: macos-26
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: recursive
+      - name: Install XcodeGen
+        run: brew install xcodegen
+      - name: Cache SwiftPM dependencies (Xcode)
+        uses: actions/cache@v6
+        with:
+          path: .build-check/xcode/SourcePackages
+          key: spm-xcode-${{ runner.os }}-${{ hashFiles('DynamicNotchApp/project.yml') }}
+          restore-keys: spm-xcode-${{ runner.os }}-
+      - name: XcodeGen, Debug build, unit tests
+        run: scripts/check.sh xcodegen app-build app-test
+      - name: Bundled helper installer (dry run, no root)
+        run: |
+          app="$PWD/.build-check/xcode/Build/Products/Debug/DynamicNotch.app"
+          codesign --verify --deep --strict "$app"
+          "$app/Contents/Resources/manual-install/install.sh" --dry-run --app "$app"
+      - name: Upload logs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: app-build-logs
+          path: .build-check/logs
+          if-no-files-found: ignore

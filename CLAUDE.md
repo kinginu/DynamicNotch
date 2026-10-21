@@ -1,7 +1,7 @@
 # CLAUDE.md — DynamicNotch
 
-Notch companion app for Apple Silicon MacBooks (macOS 26, Xcode 26.6, XcodeGen). Built locally and
-ad-hoc signed; no binaries are distributed. Start with [README.md](README.md); the detailed engineering log
+Notch companion app for Apple Silicon MacBooks (macOS 26, Xcode 26.6, XcodeGen). Ad-hoc signed
+(no Developer ID); releases are built by GitHub Actions from `v*` tags. Start with [README.md](README.md); the detailed engineering log
 (Japanese) is [DynamicNotchApp/BUILD-LOG.md](DynamicNotchApp/BUILD-LOG.md).
 
 ## Layout
@@ -15,6 +15,8 @@ ad-hoc signed; no binaries are distributed. Start with [README.md](README.md); t
 | `DynamicNotchApp/Support/` | `merge-strings.py`, `lint-strings.py`, `strings/*.json`, `make-app-icon.swift` |
 | `FanControl/` | **Git submodule** (github.com/kinginu/FanControl, pinned to a tag). `project.yml` uses `../FanControl`; `Sources/Support/SettingsStorage.swift` is a symlink into it. Change FanControl in its own repository, tag it, then bump the submodule here. |
 | `scripts/check.sh` | Every check in one script |
+| `scripts/tag-release.sh`, `scripts/release-notes.sh` | Release preparation (version bump, tag) and the CHANGELOG section extractor |
+| `.github/workflows/` | `ci.yml` (jobs `checks`, `app-build`) and `release.yml` (on `v*` tags) |
 
 ## Checks
 
@@ -35,11 +37,18 @@ or launches the app. FanControl must stay at **zero warnings**.
 - **Helper protocol:** the app ↔ helper XPC contract lives in FanControl
   (`FanControlHelperConstants.protocolVersion`, currently 2). Any change to selectors, argument
   types, error codes or the write allowlist bumps the version in FanControl first. After every
-  app rebuild the user must re-run `sudo FanControl/Support/manual-install/install.sh --app …`
+  app rebuild the user must install the helper again — Settings ▸ Fan Control ▸ General ▸
+  "Install Helper…", or `sudo <app>/Contents/Resources/manual-install/install.sh --app <app>`
   (the helper pins the app's cdhash).
 - **Safety:** never run `sudo`, never write to the SMC, and never install or restart the helper
   from a session. Fan writes need the user's explicit confirmation, step by step.
 - **Third-party material:** do not add assets from other apps (images, videos, localizations,
   shaders, binaries). Record new packages and web services in `THIRD-PARTY-NOTICES.md`.
+- **Branches and releases:** `main` is protected (pull request with passing `checks` and
+  `app-build`, linear history, no force pushes, no bypass). Merge with **rebase** so each
+  commit keeps its message and footer. `v*` tags can only be created by repository admins;
+  cut a release with `scripts/tag-release.sh X.Y.Z` (bump on a branch → PR → run again on
+  `main` → push the tag). Every release needs a `## [X.Y.Z]` section in
+  `DynamicNotchApp/CHANGELOG.md`.
 - **Commits:** small and focused. The message ends with exactly one footer line:
   `Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>` — no `Claude-Session:` line.
