@@ -4,9 +4,42 @@
 # missing or empty, so a release cannot be cut without notes. Used by .github/workflows/release.yml
 # and scripts/tag-release.sh.
 #
+# GitHub renders a single newline in release notes as a line break, so hard-wrapped Markdown is
+# unwrapped: a non-blank line joins the line before it (with one space) unless it starts a list
+# item, a heading, a code fence, a table row, a block quote or a link definition, or the line before
+# ends a paragraph-breaking construct (heading, table row, hard break). Fenced code is kept as is.
+# `--reflow FILE` prints FILE unwrapped the same way (used to keep the CHANGELOGs single-line).
+#
 #   scripts/release-notes.sh 1.0.1          # or v1.0.1
 #   CHANGELOG=path/to/CHANGELOG.md scripts/release-notes.sh 1.0.1
+#   scripts/release-notes.sh --reflow path/to/file.md
 set -euo pipefail
+
+# Joins hard-wrapped Markdown lines (stdin or files → stdout).
+reflow() {
+    awk '
+        function flush() { if (buf != "") print buf; buf = "" }
+        /^[ \t]*(```|~~~)/ { flush(); print; fence = !fence; next }
+        fence { print; next }
+        /^[ \t]*$/ { flush(); print; next }
+        /^[ \t]*([-*+]|[0-9]+[.)])[ \t]/ || /^#/ || /^[ \t]*[|>]/ || /^\[[^]]+\]: / {
+            flush(); buf = $0
+            if ($0 ~ /^#/ || $0 ~ /^[ \t]*\|/) flush()
+            next
+        }
+        buf == "" { buf = $0; next }
+        buf ~ /(  |\\)$/ { flush(); buf = $0; next }   # explicit hard break
+        { line = $0; sub(/^[ \t]+/, "", line); buf = buf " " line }
+        END { flush() }
+    ' "$@"
+}
+
+if [[ "${1:-}" == --reflow ]]; then
+    shift
+    (( $# >= 1 )) || { echo "usage: $(basename "$0") --reflow FILE…" >&2; exit 64; }
+    reflow "$@"
+    exit
+fi
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 CHANGELOG="${CHANGELOG:-$ROOT/DynamicNotchApp/CHANGELOG.md}"
@@ -29,7 +62,7 @@ notes="$(awk -v v="$version" '
     }
     found && /^\[[0-9]+\.[0-9]+\.[0-9]+\]: / { next }   # version link definitions at the end of the file
     found { print }
-' "$CHANGELOG" | sed -e '/./,$!d' | sed -e ':a' -e '/^\n*$/{$d;N;ba' -e '}')"
+' "$CHANGELOG" | reflow | sed -e '/./,$!d' | sed -e ':a' -e '/^\n*$/{$d;N;ba' -e '}')"
 
 if [[ -z "${notes//[[:space:]]/}" ]]; then
     echo "error: no \"## [$version]\" section (or an empty one) in $CHANGELOG" >&2

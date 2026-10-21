@@ -61,15 +61,12 @@ jobs:
       - name: Release notes (CHANGELOG.md)
         run: |
           scripts/release-notes.sh "$VERSION" > "$RUNNER_TEMP/notes.md"
+          # One line per paragraph: GitHub renders a single newline in release notes as a line break.
           cat >> "$RUNNER_TEMP/notes.md" <<NOTES
 
           ---
 
-          **Install:** unzip \`DynamicNotch-$VERSION.zip\`, move \`DynamicNotch.app\` to /Applications and run
-          \`xattr -dr com.apple.quarantine /Applications/DynamicNotch.app\` (the app is ad-hoc signed, not
-          notarized). For fan control, click **Install Helper…** in Settings ▸ Fan Control ▸ General, and
-          again after every update. Checksums: \`SHA256SUMS.txt\`. See the
-          [README](https://github.com/${GITHUB_REPOSITORY}/blob/$TAG/README.md#install).
+          **Install:** unzip \`DynamicNotch-$VERSION.zip\`, move \`DynamicNotch.app\` to /Applications and run \`xattr -dr com.apple.quarantine /Applications/DynamicNotch.app\` (the app is ad-hoc signed, not notarized). For fan control, click **Install Helper…** in Settings ▸ Fan Control ▸ General, and again after every update. Checksums: \`SHA256SUMS.txt\`. See the [README](https://github.com/${GITHUB_REPOSITORY}/blob/$TAG/README.md#install).
           NOTES
           cat "$RUNNER_TEMP/notes.md"
 
