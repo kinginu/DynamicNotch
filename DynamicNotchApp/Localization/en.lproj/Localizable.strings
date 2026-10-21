@@ -371,6 +371,8 @@
 "DynamicNotch needs access to Reminders to show and add your reminders." = "DynamicNotch needs access to Reminders to show and add your reminders.";
 "DynamicNotch needs access to your calendars to show events." = "DynamicNotch needs access to your calendars to show events.";
 "DynamicNotch needs permission to use your location." = "DynamicNotch needs permission to use your location.";
+"DynamicNotch wants to install its fan control helper." = "DynamicNotch wants to install its fan control helper.";
+"DynamicNotch wants to remove its fan control helper." = "DynamicNotch wants to remove its fan control helper.";
 "Edge" = "Edge";
 "Editable profile. Choose a mode for each fan; a sensor-based fan follows its own curve (drag the points or use the rows below). Then Save or Apply." = "Editable profile. Choose a mode for each fan; a sensor-based fan follows its own curve (drag the points or use the rows below). Then Save or Apply.";
 "Effect" = "Effect";
@@ -498,6 +500,8 @@
 "Installed (manual)" = "Installed (manual)";
 "Installed manually (personal mode)" = "Installed manually (personal mode)";
 "Installed manually, pinned to another build" = "Installed manually, pinned to another build";
+"Installer Output" = "Installer Output";
+"Installing the helper…" = "Installing the helper…";
 "Interface" = "Interface";
 "Invalid number %@" = "Invalid number %@";
 "Invalid time" = "Invalid time";
@@ -983,10 +987,16 @@
 "The fan control helper is needed to change it" = "The fan control helper is needed to change it";
 "The first matching app in the list wins. App rules take precedence over the load rule." = "The first matching app in the list wins. App rules take precedence over the load rule.";
 "The forecast refreshes every 15 minutes and after the Mac wakes. When offline, the last forecast is shown with its age." = "The forecast refreshes every 15 minutes and after the Mac wakes. When offline, the last forecast is shown with its age.";
+"The helper installer could not run: %@" = "The helper installer could not run: %@";
+"The helper installer failed (exit status %lld)." = "The helper installer failed (exit status %lld).";
+"The helper installer failed: %@" = "The helper installer failed: %@";
+"The helper is installed for this build of DynamicNotch. After every update of DynamicNotch, install the helper again (it only accepts the build it was installed for)." = "The helper is installed for this build of DynamicNotch. After every update of DynamicNotch, install the helper again (it only accepts the build it was installed for).";
 "The helper was installed manually with install.sh. After updating DynamicNotch, run sudo install.sh again; remove it with sudo uninstall.sh (FanControl/Support/manual-install/)." = "The helper was installed manually with install.sh. After updating DynamicNotch, run sudo install.sh again; remove it with sudo uninstall.sh (FanControl/Support/manual-install/).";
 "The helper’s launchd plist is missing from DynamicNotch.app. Reinstall DynamicNotch to change fan speeds." = "The helper’s launchd plist is missing from DynamicNotch.app. Reinstall DynamicNotch to change fan speeds.";
 "The history is kept while DynamicNotch runs (about 30 minutes) and is not saved." = "The history is kept while DynamicNotch runs (about 30 minutes) and is not saved.";
+"The installed helper is pinned to a different build of DynamicNotch and refuses this app. Click Install Helper… to install it for this build." = "The installed helper is pinned to a different build of DynamicNotch and refuses this app. Click Install Helper… to install it for this build.";
 "The installed helper is pinned to a different build of DynamicNotch and refuses this app. Re-run sudo install.sh with this app (FanControl/Support/manual-install/), then click Check Again." = "The installed helper is pinned to a different build of DynamicNotch and refuses this app. Re-run sudo install.sh with this app (FanControl/Support/manual-install/), then click Check Again.";
+"The installed helper’s code signature does not match what DynamicNotch expects. Click Install Helper… to install the helper of this build." = "The installed helper’s code signature does not match what DynamicNotch expects. Click Install Helper… to install the helper of this build.";
 "The installed helper’s code signature does not match what DynamicNotch expects. Re-run sudo install.sh with this app (FanControl/Support/manual-install/), then click Check Again." = "The installed helper’s code signature does not match what DynamicNotch expects. Re-run sudo install.sh with this app (FanControl/Support/manual-install/), then click Check Again.";
 "The level is measured only while the Nook is open. macOS shows the microphone indicator while it runs." = "The level is measured only while the Nook is open. macOS shows the microphone indicator while it runs.";
 "The level is not shown for a Bluetooth input: opening its microphone would switch the headset to lower-quality call audio." = "The level is not shown for a Bluetooth input: opening its microphone would switch the headset to lower-quality call audio.";
@@ -1056,6 +1066,8 @@
 "Underline" = "Underline";
 "Unexpected currency sign" = "Unexpected currency sign";
 "Unexpected “%@”" = "Unexpected “%@”";
+"Uninstall Helper…" = "Uninstall Helper…";
+"Uninstalling the helper…" = "Uninstalling the helper…";
 "Unknown" = "Unknown";
 "Unknown (%@)" = "Unknown (%@)";
 "Unknown time zone “%@”" = "Unknown time zone “%@”";
