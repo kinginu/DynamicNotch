@@ -15,7 +15,7 @@ Notch companion app for Apple Silicon MacBooks (macOS 26, Xcode 26.6, XcodeGen).
 | `DynamicNotchApp/Support/` | `merge-strings.py`, `lint-strings.py`, `strings/*.json`, `make-app-icon.swift` |
 | `FanControl/` | **Git submodule** (github.com/kinginu/FanControl, pinned to a tag). `project.yml` uses `../FanControl`; `Sources/Support/SettingsStorage.swift` is a symlink into it. Change FanControl in its own repository, tag it, then bump the submodule here. |
 | `scripts/check.sh` | Every check in one script |
-| `scripts/tag-release.sh`, `scripts/release-notes.sh` | Release preparation (version bump, tag) and the CHANGELOG section extractor |
+| `scripts/tag-release.sh`, `scripts/release-notes.sh` | Release preparation (version bump, tag) and the CHANGELOG section extractor (unwraps hard-wrapped lines; self-test `scripts/tests/release-notes-test.sh`) |
 | `.github/workflows/` | `ci.yml` (jobs `checks`, `app-build`) and `release.yml` (on `v*` tags) |
 
 ## Checks

@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # Runs every check of this repository: the DynamicNotch app (Xcode build + unit tests), its
 # Command Line Tools harness (build + tests), the FanControl package (build + tests), the strings
-# lint (when present) and shellcheck. Read-only with respect to the system: nothing is installed,
-# no sudo, no SMC writes, no app is launched (the app's unit tests are host-less).
+# lint (when present) and shellcheck (plus the self-test of scripts/release-notes.sh). Read-only
+# with respect to the system: nothing is installed, no sudo, no SMC writes, no app is launched (the
+# app's unit tests are host-less).
 #
 #   scripts/check.sh               all checks
 #   scripts/check.sh --fast        skip the Xcode build and the app's Xcode tests
@@ -43,7 +44,7 @@ for arg in "$@"; do
         --fast) fast=1 ;;
         --keep-going|-k) keep_going=1 ;;
         --list) printf '%s\n' "${ALL_STEPS[@]}"; exit 0 ;;
-        -h|--help) sed -n '2,20p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 0 ;;
+        -h|--help) sed -n '2,21p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 0 ;;
         -*) echo "unknown option: $arg" >&2; exit 2 ;;
         *)
             if [[ " ${ALL_STEPS[*]} " != *" $arg "* ]]; then echo "unknown step: $arg (see --list)" >&2; exit 2; fi
@@ -128,7 +129,8 @@ run_step() {
             while IFS= read -r f; do files+=("$ROOT/$f"); done < <(cd "$ROOT" && git ls-files '*.sh'; \
                 cd "$ROOT" && git ls-files --others --exclude-standard '*.sh')
             ((${#files[@]})) || return 0
-            shellcheck -x "${files[@]}" ;;
+            shellcheck -x "${files[@]}" &&
+                "$ROOT/scripts/tests/release-notes-test.sh" ;;
     esac > "$log" 2>&1
     local status=$?
     # Warnings: FanControl must have none (it is kept at 0). The app
