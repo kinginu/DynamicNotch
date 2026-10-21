@@ -134,11 +134,14 @@ private final class FakeDriver: AirPodsListeningModeDriving, @unchecked Sendable
     var delay: TimeInterval = 0
     var current: AirPodsListeningMode = .noiseCancellation
     private(set) var requests: [AirPodsListeningModeRequest] = []
+    /// When each request reached the driver (after `delay`).
+    private(set) var requestTimes: [Date] = []
 
     func perform(_ request: AirPodsListeningModeRequest) -> Result<AirPodsListeningModeReading, AirPodsNoiseControlError> {
         Thread.sleep(forTimeInterval: delay)
         lock.lock(); defer { lock.unlock() }
         requests.append(request)
+        requestTimes.append(Date())
         if case .set(let mode, _) = request { current = mode }
         return .success(AirPodsListeningModeReading(deviceName: "AirPods Pro", mode: current,
                                                     available: [.transparency, .adaptive, .noiseCancellation]))
@@ -262,11 +265,15 @@ struct AirPodsServiceTests {
         service.minimumInterval = 0.3
         service.refresh(target)
         await waitIdle(service)
-        let start = Date()
         service.select(.transparency, for: target)
         await waitIdle(service)
-        #expect(Date().timeIntervalSince(start) >= 0.25)
         #expect(fake.requests.count == 2)
+        // The spacing between the two driver calls, not the time since select(): on a slow
+        // machine waitIdle() may return well after the first call ended, which shortens the
+        // remaining wait without breaking the rule.
+        if fake.requestTimes.count == 2 {
+            #expect(fake.requestTimes[1].timeIntervalSince(fake.requestTimes[0]) >= 0.25)
+        }
     }
 }
 
