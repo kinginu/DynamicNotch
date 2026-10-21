@@ -64,6 +64,8 @@ enum FanControlStartup {
             }
         }
         // Team ID: not set (ad-hoc / manual-install personal mode, FanControl/docs/helper.md §6).
+        // "Install Helper…" / "Uninstall Helper…" run the bundled manual-install scripts.
+        FanControlHelperInstallerAction.register()
         let fanSettings = FanControlSettingKey.general.value
         if fanSettings.isEnabled && fanSettings.autoStartMonitoring {
             FanControlManager.shared.startMonitoring()

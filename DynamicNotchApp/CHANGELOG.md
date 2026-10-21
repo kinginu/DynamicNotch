@@ -5,6 +5,34 @@ All notable changes to the DynamicNotch app are documented here. The format foll
 [Semantic Versioning](https://semver.org/). Detailed engineering notes (in Japanese) are in
 [BUILD-LOG.md](BUILD-LOG.md).
 
+## [1.0.1] — 2026-10-21
+
+First release with a downloadable build (`DynamicNotch-1.0.1.zip` on GitHub Releases, ad-hoc
+signed with Hardened Runtime, not notarized). Bundles **FanControl 1.0.1** (helper XPC protocol
+version 2, unchanged).
+
+### Added
+
+- **Install Helper… / Uninstall Helper…** in Settings ▸ Fan Control ▸ General. They run the
+  bundled installer as root after macOS's administrator password dialog, show its output live,
+  and check the connection again afterwards. The install button appears while the helper is not
+  installed, is pinned to another build of the app, or is refused.
+- **Bundled helper installer**: `DynamicNotch.app/Contents/Resources/manual-install/` holds
+  FanControl's `install.sh`, `uninstall.sh` and `status.sh` (with their libraries), so no source
+  checkout is needed: `sudo /Applications/DynamicNotch.app/Contents/Resources/manual-install/install.sh /Applications/DynamicNotch.app`.
+- **CI** (GitHub Actions, `macos-26`, Xcode 26.6): the checks of `scripts/check.sh --fast` and the
+  Xcode Debug build with the app's unit tests, on every pull request and push to `main`.
+- **Release workflow**: pushing a `vX.Y.Z` tag builds the Release configuration with that version,
+  signs it, and publishes the zip, `manual-install.tar.gz` and `SHA256SUMS.txt` with the notes from
+  this file. `scripts/tag-release.sh` and `scripts/release-notes.sh` prepare it.
+
+### Changed
+
+- The version comes from the `MARKETING_VERSION` / `CURRENT_PROJECT_VERSION` build settings in
+  `project.yml`; the build number is now `major*10000 + minor*100 + patch` (10001 for 1.0.1).
+- After every update the helper has to be installed again (it pins the app's cdhash): the pane
+  says so and offers the button.
+
 ## [1.0.0] — 2026-10-21
 
 First release (`CFBundleShortVersionString` 1.0.0, `CFBundleVersion` 1). Built locally and ad-hoc
@@ -73,4 +101,5 @@ move between pages).
 - The notch window is an `NSWindow`, so clicking it can activate the app.
 - `mediaremote-adapter` relies on the private `MediaRemote.framework`.
 
+[1.0.1]: https://github.com/kinginu/DynamicNotch/releases/tag/v1.0.1
 [1.0.0]: https://github.com/kinginu/DynamicNotch/releases/tag/v1.0.0

@@ -32,6 +32,7 @@ excluded from the harness target.
 | `FanControlTemperatureWidgetSettingsView.swift` | Its options in Settings ▸ Widgets |
 | `FanControlLiveActivity.swift` | `FanControlAlertView`, the closed-notch fan alert |
 | `FanControlNookHooks.swift` | `FanControlNookVisibility` (pause polling while the Nook is hidden) and `FanControlWidgetPresence` |
+| `FanControlHelperInstallerAction.swift` | Sets `FanControlHostActions.installHelper` / `.uninstallHelper` to run the bundled `install.sh` / `uninstall.sh` as root (§6 "Helper installer") |
 
 `Sources/Support/FanControl-Patches.swift` holds the module-level type aliases for files that do
 not import `FanControlUI`, the host-store keys for the two widget settings (same `UserDefaults`
@@ -57,8 +58,9 @@ Each hook is marked in the code with a comment naming its letter, e.g.
   every pane) before About. `WindowsManager.shared.showSettings(pane: .fanControl)` opens it.
 - **(e) `AppDelegate.applicationDidFinishLaunching`** → `FanControlStartup`: creates
   `FanControlAlertCoordinator.shared` (it mirrors the stored settings and thresholds into
-  `FanControlManager`), forwards alerts to the live activities, and starts read-only monitoring
-  only when the user has enabled the feature (off by default).
+  `FanControlManager`), forwards alerts to the live activities, registers the "Install Helper…" /
+  "Uninstall Helper…" actions (§6), and starts read-only monitoring only when the user has enabled
+  the feature (off by default).
 - **(f) `LiveActivities/`**: the `fanAlert` live activity (`gate: .always`, priority 100), drawn
   by `FanControlAlertView(part:)` on both sides of the notch.
 - **(g) Termination and wake**: nothing to add. `FanControlManager` hands the fans back to macOS on
@@ -89,10 +91,55 @@ including `FanControl/Sources/FanControlUI`, against it.
 ## 6. Manual helper install
 
 Without a Developer ID Team ID, `SMAppService` cannot register the helper, so this app uses
-FanControl's manual-install mode: `sudo FanControl/Support/manual-install/install.sh --app <path to
-DynamicNotch.app>` copies the helper to `/Library/PrivilegedHelperTools/`, writes a root-owned
-LaunchDaemon plist whose client requirement pins the app's bundle id and cdhash, and bootstraps it.
-The app in turn checks the installed helper's cdhash before connecting. Every rebuild changes the
-app's cdhash, so `install.sh` has to be run again after each build; until then Settings ▸ Fan
-Control ▸ General says the helper is pinned to another build. `uninstall.sh` and `status.sh` sit
-next to it (`FanControl/Support/manual-install/README.md`, `FanControl/docs/helper.md` §6).
+FanControl's manual-install mode: `install.sh` copies the helper to `/Library/PrivilegedHelperTools/`,
+writes a root-owned LaunchDaemon plist whose client requirement pins the app's bundle id and
+cdhash, and bootstraps it. The app in turn checks the installed helper's cdhash before connecting.
+Every build (and so every update) changes the app's cdhash, so the helper has to be installed again
+after each one; until then Settings ▸ Fan Control ▸ General says the helper is pinned to another
+build. `uninstall.sh` and `status.sh` sit next to it (`FanControl/Support/manual-install/README.md`,
+`FanControl/docs/helper.md` §6).
+
+### Helper installer (bundled scripts and the "Install Helper…" button)
+
+- **Bundled scripts.** `project.yml` copies `FanControl/Support/manual-install/*` and the two
+  libraries they source (`lib.sh`, `identifiers.sh`) flat into
+  `DynamicNotch.app/Contents/Resources/manual-install/` (the executable bits are kept). `common.sh`
+  finds the libraries next to itself in that layout and one level up in the source tree. From
+  Terminal:
+
+  ```sh
+  M=/Applications/DynamicNotch.app/Contents/Resources/manual-install
+  $M/install.sh --dry-run /Applications/DynamicNotch.app    # preview, no root
+  sudo $M/install.sh /Applications/DynamicNotch.app         # install / update
+  $M/status.sh /Applications/DynamicNotch.app               # read-only check
+  sudo $M/uninstall.sh /Applications/DynamicNotch.app       # remove
+  ```
+
+- **The buttons.** FanControlUI exposes the host hook `FanControlHostActions.installHelper` /
+  `.uninstallHelper` (`FanControl/docs/helper.md` §6 "Installing from the app").
+  `FanControlStartup` (hook (e)) calls `FanControlHelperInstallerAction.register()`
+  (`Sources/FanControlGlue/FanControlHelperInstallerAction.swift`), which sets both when the
+  bundled scripts exist. Settings ▸ Fan Control ▸ General ▸ Helper then shows **Install Helper…**
+  while the helper is not installed, is pinned to another build, or is refused, and **Uninstall
+  Helper…** while it is installed manually. A successful install is followed by "Check Again"
+  (`retryHelperConnection()`); the installer's output appears under "Installer Output" while it
+  runs and stays there afterwards (expanded after a failure).
+- **How it runs** (`Sources/Support/AdministratorScript.swift`, `HelperInstallerCommands.swift`):
+  `/usr/bin/osascript` with a constant AppleScript, `do shell script (item 1 of argv) with prompt
+  (item 2 of argv) with administrator privileges`, so macOS shows its administrator password
+  dialog ("DynamicNotch wants to install its fan control helper."). The shell command is the
+  osascript argument, never part of the AppleScript text, and every word of it is single-quoted:
+  `'/bin/bash' '<app>/Contents/Resources/manual-install/install.sh' '--app' '<app>'`, stdin from
+  `/dev/null`, output appended to a log file the app created in a fresh 0700 temporary directory
+  (read every 0.25 s for the live output), then the exit status as a marker line. Cancelling the
+  dialog (AppleScript error -128) changes nothing and shows nothing; a non-zero exit shows the
+  script's last `error:` line in the pane's footer.
+- **Trust.** The scripts run as root from the app bundle, which the user owns. That is the same
+  trust as typing `sudo …/install.sh` in Terminal: whoever can modify the bundle could already
+  change what the user runs. The password dialog is macOS's own; the app never sees the password.
+- **Tests.** `Tests/DynamicNotchAppTests/AdministratorScriptTests.swift` (CLT harness and Xcode):
+  quoting round trips through `/bin/sh` for hostile paths (quotes, `$(…)`, backticks, newlines),
+  argument passing and the exit-status marker, the constant AppleScript, the outcome mapping
+  (success, failure, cancel, osascript errors), and an end-to-end run of the real `install.sh
+  --help` / `--dry-run` through osascript **without** administrator privileges. The privileged path
+  itself (the password dialog and a real install) is only tested by hand.
