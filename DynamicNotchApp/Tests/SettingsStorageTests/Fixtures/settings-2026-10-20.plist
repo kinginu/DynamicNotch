@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fanControlGeneralSettings</key>
+	<string>{"autoStartMonitoring":true,"fanAnomalyAlertEnabled":true,"highTemperatureAlertEnabled":true,"isEnabled":true,"pauseWhenNookHidden":true,"pollingInterval":2,"reapplyProfileAfterWake":true}</string>
+	<key>fanControlWidgetSettings</key>
+	<string>{"gridSize":5,"showProfilePicker":true,"showTargetRPM":false,"temperatureUnit":"celsius"}</string>
+	<key>generalSettings</key>
+	<string>{"accessibilityGranted":false,"animationEnabled":true,"autoHideNotchTime":4.563580802317416,"disabled":false,"hapticFeedbackEnabled":true,"heightFineTuning":0,"isNonNotch":false,"isNonNotchAndDisabled":false,"launchAtLogin":false,"liquidGlass":true,"showChangelog":true,"soundFxEnabled":true,"widgetWidth":0}</string>
+	<key>intro</key>
+	<false/>
+	<key>liquidBasicSettings</key>
+	<string>{"field08":0.5785965337309207,"field10":0.5,"field18":0.5,"field20":0.5,"field28":0.40200988247863245,"field30":0.5,"field38":0.5,"field40":true,"field58":0,"field78":1}</string>
+	<key>nookSettings</key>
+	<string>{"separatorSpacing":24,"widgets":["fanControl","timer","calendar","media","shortcuts","mirror","notes","quickApps","todos"]}</string>
+	<key>quickAppsPaths</key>
+	<array>
+		<string>/Applications/Bitwarden.app</string>
+	</array>
+	<key>shortcutsWidgetSelection</key>
+	<array>
+		<string>Start 15 min Timer</string>
+		<string>Start 45 min Timer</string>
+	</array>
+</dict>
+</plist>

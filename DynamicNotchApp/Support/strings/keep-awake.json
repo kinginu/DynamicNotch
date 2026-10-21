@@ -1,0 +1,27 @@
+{
+  "comment": "Keep Awake widget",
+  "keys": [
+    "Keep Awake",
+    "15 minutes",
+    "1 hour",
+    "2 hours",
+    "Until turned off",
+    "Off",
+    "Mac sleeps normally",
+    "Could not keep the Mac awake",
+    "Mac awake",
+    "Mac and display awake",
+    "%@ until %@",
+    "%@ until turned off",
+    "Turn Off",
+    "Turn On",
+    "Duration",
+    "Allow display to sleep",
+    "The duration is used by the widget's switch; the chips in the widget start a session of their own length. With the display allowed to sleep, only idle system sleep is prevented. Closing the lid still sleeps the Mac.",
+    "Show in the closed notch",
+    "Resume after relaunch",
+    "When resumed, a timed session keeps its original end time.",
+    "On · %@ left",
+    "On · until turned off"
+  ]
+}

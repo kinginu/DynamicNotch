@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>DynamicNotch</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIconFile</key>
+	<string>DynamicNotchAppIcon</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+	</array>
+	<key>CFBundleName</key>
+	<string>DynamicNotch</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0.0</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>CFBundleURLName</key>
+			<string>com.example.dynamicnotch.DynamicNotch.automation</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>dynamicnotch</string>
+			</array>
+		</dict>
+	</array>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.utilities</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>26.0</string>
+	<key>LSUIElement</key>
+	<true/>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>DynamicNotch controls media apps (Music, Spotify) and runs Shortcuts via Apple Events.</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>DynamicNotch shows connected Bluetooth devices and their battery levels.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>DynamicNotch shows connected Bluetooth devices and their battery levels.</string>
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string>DynamicNotch shows your upcoming calendar events in the notch.</string>
+	<key>NSCalendarsWriteOnlyAccessUsageDescription</key>
+	<string>DynamicNotch can add events to your calendar.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>The Mirror widget shows your camera preview in the notch.</string>
+	<key>NSDownloadsFolderUsageDescription</key>
+	<string>The Downloads widget lists your recent downloads and their progress.</string>
+	<key>NSLocationUsageDescription</key>
+	<string>The Weather widget uses your location to show the local forecast. With access, the Network widget can also show the Wi‑Fi network name.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>The Weather widget uses your location to show the local forecast.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>The Audio widget shows the input level of your microphone.</string>
+	<key>NSRemindersFullAccessUsageDescription</key>
+	<string>The Reminders widget shows, adds and completes your reminders in the notch.</string>
+</dict>
+</plist>

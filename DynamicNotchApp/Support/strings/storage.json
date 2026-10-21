@@ -1,0 +1,20 @@
+{
+  "comment": "Storage widget",
+  "keys": [
+    "Storage",
+    "No volumes",
+    "Mounted disks appear here.",
+    "%@ free",
+    "%lld%% used",
+    "%1$@ free of %2$@",
+    "%1$@ used of %2$@, %3$@ free",
+    "Eject “%@”",
+    "Show",
+    "Free space (GB)",
+    "Percentage used",
+    "Show disk images",
+    "Updates every minute and whenever a disk is mounted or ejected.",
+    "Volumes",
+    "New disks are shown automatically."
+  ]
+}

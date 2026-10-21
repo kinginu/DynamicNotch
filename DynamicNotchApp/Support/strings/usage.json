@@ -1,0 +1,32 @@
+{
+  "comment": "Usage widget (self-collected app usage, F10)",
+  "keys": [
+    "Usage",
+    "Usage recording is off",
+    "See which apps you use, recorded on this Mac only.",
+    "Turn On…",
+    "1 pickup",
+    "%lld pickups",
+    "Times this Mac was unlocked today",
+    "Today",
+    "No app use recorded yet today.",
+    "Record app usage",
+    "When on, DynamicNotch records which app is in front and for how long, and how often this Mac is unlocked. The data stays on this Mac, is never sent anywhere, and daily totals older than 90 days are deleted.",
+    "Stop counting after",
+    "Time without keyboard, mouse or trackpad input is not counted. Time while this Mac is asleep or locked is never counted.",
+    "No excluded apps",
+    "Add App",
+    "Recently Used",
+    "Choose App…",
+    "Excluded Apps",
+    "Excluded apps are not recorded, and what was recorded for them before is hidden.",
+    "Data",
+    "Nothing recorded yet",
+    "%lld days recorded since %@",
+    "Export CSV…",
+    "Clear Usage Data…",
+    "Clear all usage data?",
+    "Clear Usage Data",
+    "This deletes every recorded day on this Mac. It cannot be undone."
+  ]
+}

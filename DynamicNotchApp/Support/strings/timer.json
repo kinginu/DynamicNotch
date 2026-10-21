@@ -1,0 +1,20 @@
+{
+  "comment": "Timer widget and live activity (iOS Clock style)",
+  "keys": [
+    "Label",
+    "Recents",
+    "Repeat",
+    "Stop",
+    "Paused",
+    "Timer Ended (+%lld)",
+    "Show running timers in the closed notch",
+    "When Timer Ends",
+    "Stop Playing",
+    "Alert Duration",
+    "30 seconds",
+    "1 minute",
+    "5 minutes",
+    "Until Stopped",
+    "Timers keep running while the notch is closed. When one ends, the notch shows it with Stop and the sound repeats until you stop it in the Timer widget or the alert duration passes. Stop Playing pauses the music instead."
+  ]
+}

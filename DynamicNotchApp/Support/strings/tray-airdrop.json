@@ -1,0 +1,8 @@
+{
+  "comment": "Tray AirDrop zone",
+  "keys": [
+    "Drop to send",
+    "Click or drop files to send via AirDrop",
+    "Shows an AirDrop area on the right side of the tray. Drop files on it, from Finder or from the tray, to send them via AirDrop."
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "comment": "Audio widget",
+  "keys": [
+    "Audio",
+    "Output",
+    "Input",
+    "No input devices",
+    "No output devices",
+    "Mute",
+    "Unmute",
+    "Output volume",
+    "This device has no volume control",
+    "Input level",
+    "Show input devices",
+    "Show output volume",
+    "Show input level",
+    "Click a device in the widget to make it the default output or input, as in Control Center.",
+    "Microphone access is on.",
+    "Allow microphone access to show the input level.",
+    "Allow Microphone Access",
+    "Microphone access is off. Turn on DynamicNotch in System Settings ▸ Privacy & Security ▸ Microphone to show the input level.",
+    "Open System Settings",
+    "This build is not set up for microphone access, so the input level is not shown.",
+    "Input Level",
+    "The level is measured only while the Nook is open. macOS shows the microphone indicator while it runs.",
+    "The level is not shown for a Bluetooth input: opening its microphone would switch the headset to lower-quality call audio.",
+    "Output Devices",
+    "Input Devices",
+    "Default"
+  ]
+}

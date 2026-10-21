@@ -1,0 +1,22 @@
+{
+  "comment": "Volume / brightness HUD (F5): Live Activities ▸ Customize ▸ HUD, Input Monitoring permission",
+  "keys": [
+    "HUD",
+    "Volume & brightness HUD",
+    "Shows a short HUD in the closed notch when the volume, display brightness or keyboard backlight changes.",
+    "Show for",
+    "Volume",
+    "Display brightness",
+    "Keyboard backlight",
+    "Keys",
+    "Watch the volume and brightness keys",
+    "With Input Monitoring the volume, brightness and keyboard-backlight keys are read by a listen-only event tap. Without it volume changes still show; the brightness keys work only if macOS delivers them to the app's global event monitor.",
+    "Input Monitoring",
+    "Request Access",
+    "Media keys are read with a listen-only event tap.",
+    "Not allowed. Volume changes still show; the keys may not.",
+    "Sources",
+    "Media keys",
+    "The system's own volume and brightness HUD still appears: macOS has no public API to hide it."
+  ]
+}

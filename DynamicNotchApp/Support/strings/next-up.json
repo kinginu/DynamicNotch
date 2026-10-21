@@ -1,0 +1,32 @@
+{
+  "comment": "Next Up widget",
+  "keys": [
+    "Next Up",
+    "New Event",
+    "Nothing coming up",
+    "No events in the next %lld h",
+    "See what's next",
+    "Your next events appear here.",
+    "Dismiss notch reminder",
+    "Join",
+    "Join %@",
+    "All day",
+    "Tomorrow, all day",
+    "%@, all day",
+    "now · %lld min left",
+    "now · %lld h left",
+    "now · %lld h %lld min left",
+    "in %lld min",
+    "in %lld h",
+    "in %lld h %lld min",
+    "tomorrow, %@",
+    "today, %@",
+    "%lld min",
+    "Look ahead",
+    "Events shown",
+    "Remind in the closed notch",
+    "Show the reminder",
+    "%lld min before",
+    "The closed notch shows a calendar symbol and the minutes left until the event starts. Dismiss it with the bell button in the widget."
+  ]
+}

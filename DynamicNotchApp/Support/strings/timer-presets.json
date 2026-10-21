@@ -1,0 +1,10 @@
+{
+  "comment": "Timer presets (Timer widget settings)",
+  "keys": [
+    "Presets",
+    "Restore Defaults",
+    "Show Recents in the … menu",
+    "The presets are the chips in the Timer widget; clicking one sets the timer (and its label, if it has one). A preset set to 0 is hidden.",
+    "Preset %lld"
+  ]
+}

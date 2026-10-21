@@ -1,0 +1,16 @@
+# SwiftPM / Xcode build artifacts
+.build/
+.swiftpm/
+/FanControl/.build/
+DerivedData/
+# scripts/check.sh build products and logs (CHECK_BUILD_DIR)
+/.build-check/
+xcuserdata/
+*.xcuserstate
+
+# Editor / OS
+.DS_Store
+*.swp
+__pycache__/
+
+# Note: Package.resolved is intentionally NOT ignored.

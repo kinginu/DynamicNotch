@@ -1,0 +1,1 @@
+../../../FanControl/Sources/FanControlUI/Storage/SettingsStore.swift

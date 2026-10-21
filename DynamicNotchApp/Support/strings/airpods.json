@@ -1,0 +1,30 @@
+{
+  "comment": "AirPods listening mode (Audio widget, Settings ▸ Widgets ▸ Audio; F7)",
+  "keys": [
+    "Off",
+    "Transparency",
+    "Adaptive",
+    "Noise Cancellation",
+    "Listening Mode",
+    "Read Current Mode",
+    "Open Sound Settings",
+    "Allow Accessibility access for DynamicNotch in Settings ▸ Widgets ▸ Audio to switch the AirPods listening mode here.",
+    "Show AirPods listening mode",
+    "Accessibility access is on.",
+    "Switching the listening mode uses the Sound menu in the menu bar, which needs Accessibility access.",
+    "Accessibility access is off. Turn on DynamicNotch in System Settings ▸ Privacy & Security ▸ Accessibility to switch the listening mode here.",
+    "Allow Accessibility Access",
+    "Unknown",
+    "AirPods Listening Mode",
+    "Shown when AirPods Pro, AirPods Max or AirPods 4 with Active Noise Cancellation are the output. Switching opens the Sound menu in the menu bar for a moment and closes it again. The Sound item must be in the menu bar (System Settings ▸ Control Center ▸ Sound).",
+    "Allow Accessibility access to switch the listening mode here.",
+    "The screen is locked.",
+    "Show Sound in the menu bar (System Settings ▸ Control Center ▸ Sound) to switch the listening mode here.",
+    "The Sound menu did not open.",
+    "The AirPods are not in the Sound menu.",
+    "The AirPods are not the current output.",
+    "The Sound menu shows no listening modes for these AirPods.",
+    "%@ is not available for these AirPods.",
+    "Could not select the listening mode."
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "comment": "Reminders widget (EventKit)",
+  "keys": [
+    "Reminders",
+    "%lld reminders",
+    "No Reminders",
+    "New Reminder",
+    "New reminder…",
+    "New reminder",
+    "Show your reminders here",
+    "No access to Reminders",
+    "DynamicNotch needs access to Reminders to show and add your reminders.",
+    "Reminders access is off. Turn on DynamicNotch in System Settings ▸ Privacy & Security ▸ Reminders.",
+    "Lists",
+    "When no list is chosen, the widget shows your default Reminders list.",
+    "Add new reminders to",
+    "Show due dates",
+    "The widget shows incomplete reminders, sorted by due date. Lists, due dates and details are edited in Reminders."
+  ]
+}

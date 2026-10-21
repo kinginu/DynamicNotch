@@ -1,0 +1,31 @@
+{
+  "comment": "System widget (SystemStatsWidget*)",
+  "keys": [
+    "System",
+    "CPU",
+    "GPU",
+    "Memory",
+    "Disk",
+    "Thermal, Load & Uptime",
+    "No rows selected",
+    "Choose rows in Settings ▸ Nook ▸ Widgets ▸ System.",
+    "Not available",
+    "Swap %@ · Comp. %@ GB",
+    "Collecting…",
+    "Thermal state",
+    "Load average (1, 5, 15 min)",
+    "Uptime",
+    "Normal",
+    "Warning",
+    "Critical",
+    "Nominal",
+    "Fair",
+    "Serious",
+    "Rows",
+    "History",
+    "%lld min",
+    "Show efficiency and performance cores",
+    "Values are sampled every 2 seconds while the widget is in the Nook, also when the notch is closed. Only public system statistics are read (no helper, no SMC).",
+    "This Mac does not report GPU utilisation in the I/O Registry."
+  ]
+}

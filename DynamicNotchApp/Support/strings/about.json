@@ -1,0 +1,20 @@
+{
+  "comment": "About pane, intro card and steppers (AboutSettingsView, IntroView, …)",
+  "keys": [
+    "Version %@ (%@)",
+    "Open source under the MIT License.",
+    "Fan Control helper",
+    "Installed (manual)",
+    "Not installed",
+    "Copy Diagnostics",
+    "Copied",
+    "Settings…",
+    "Get Started",
+    "Decrease",
+    "Increase",
+    "Open Source Licenses",
+    "See repository",
+    "Welcome to DynamicNotch!",
+    "Hover over the notch"
+  ]
+}

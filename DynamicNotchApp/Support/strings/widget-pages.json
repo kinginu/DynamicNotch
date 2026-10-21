@@ -1,0 +1,16 @@
+{
+  "comment": "F9: Nook widget pages and drag-to-reorder (NookWidgetGrid, NookWidgetPagesSettingsList)",
+  "keys": [
+    "Page %lld of %lld",
+    "Empty Page",
+    "Drag a widget here",
+    "Add Page",
+    "Add a page of widgets to the Nook (swipe or use the page dots to switch pages)",
+    "In the Nook (drag between pages)",
+    "Page %lld",
+    "Empty",
+    "Remove Page",
+    "Remove Page (its widgets move to the previous page)",
+    "Hold ⌥ and drag a widget to move it, or press and hold its header"
+  ]
+}

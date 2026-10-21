@@ -1,0 +1,13 @@
+{
+  "comment": "Permission titles (PermissionCenter / PermissionStatusRow)",
+  "keys": [
+    "Microphone",
+    "Camera",
+    "Location Services",
+    "Screen Recording",
+    "Accessibility",
+    "Bluetooth",
+    "Calendars",
+    "Reminders"
+  ]
+}
